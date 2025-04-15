@@ -1,0 +1,6 @@
+@TesteEclipseWorks.Api_HostAddress = http://localhost:5103
+
+GET {{TesteEclipseWorks.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

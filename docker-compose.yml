@@ -1,0 +1,44 @@
+version: "3.4"
+
+services:
+  teste-eclipseworks-postgres:
+    image: postgres:16
+    container_name: teste-eclipseworks-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=teste_eclipse_works
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.docker/core/home:/data/api
+    extra_hosts:
+      - "host.docker.internal:189.126.105.183"
+    networks:
+      - teste-eclipseworks-api-network
+
+  teste-eclipseworks-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: teste-eclipseworks-api
+    restart: unless-stopped
+    environment:
+      - BUILD_CONFIGURATION=Release
+      - ASPNETCORE_URLS=http://+:5006
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - 5006:5006
+    volumes:
+      - ./.docker/core/home:/data/api
+    extra_hosts:
+      - "host.docker.internal:189.126.105.183"
+    networks:
+      - teste-eclipseworks-api-network
+
+networks:
+  teste-eclipseworks-api-network:
+    driver: bridge
+  nginx_app_default:
+      external: true
